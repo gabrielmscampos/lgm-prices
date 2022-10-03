@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "lgm-prices"
+version = "0.1.0"
+description = "Fetch LigaMagic cards price."
+authors = ["Gabriel Moreira <gabrielmscampos@gmail.com>"]
+license = "Private"
+readme = "README.md"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Operating System :: OS Independent",
+    "License :: Private",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+include = [
+    "LICENSE",
+]
+packages = [
+    { include = "lgm_prices" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.27.1"
+more-itertools = "^8.14.0"
+Pillow = "^9.2.0"
+cssutils = "^2.6.0"
+bs4 = "^0.0.1"
+pytesseract = "^0.3.10"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
