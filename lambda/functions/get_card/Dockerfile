@@ -5,30 +5,28 @@ RUN yum -y update
 RUN yum -y install wget libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel
 RUN yum group install -y "Development Tools"
 
-# Build leptonica
+# Download leptonica and tesseact into /opt
 WORKDIR /opt
-RUN wget http://www.leptonica.org/source/leptonica-1.82.0.tar.gz
-RUN ls -la
-RUN tar -zxvf leptonica-1.82.0.tar.gz
-WORKDIR ./leptonica-1.82.0
-RUN ./configure
-RUN make -j
-RUN make install
-RUN cd .. && rm leptonica-1.82.0.tar.gz
+RUN wget http://www.leptonica.org/source/leptonica-1.82.0.tar.gz && tar -zxvf leptonica-1.82.0.tar.gz
+RUN wget https://github.com/tesseract-ocr/tesseract/archive/refs/tags/5.2.0.tar.gz && tar -zxvf 5.2.0.tar.gz
+RUN rm -rf leptonica-1.82.0.tar.gz && rm -rf 5.2.0.tar.gz
+
+# Build leptonica
+WORKDIR /opt/leptonica-1.82.0
+RUN ./configure && make -j && make install
 
 # Build tesseract
-RUN wget https://github.com/tesseract-ocr/tesseract/archive/refs/tags/5.2.0.tar.gz
-RUN tar -zxvf 5.2.0.tar.gz
-WORKDIR ./tesseract-5.2.0
+WORKDIR /opt/tesseract-5.2.0
 RUN ./autogen.sh
 RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/local/include ./configure --with-extra-includes=/usr/local/include --with-extra-libraries=/usr/local/lib
-RUN LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make -j
-RUN make install
-RUN /sbin/ldconfig
-RUN cd .. && rm 5.2.0.tar.gz
+RUN LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make -j && make install && /sbin/ldconfig
+
+# Remove build src code
+WORKDIR /opt
+RUN rm -rf leptonica-1.82.0 && rm -rf tesseract-5.2.0
 
 # Optional: install language packs
-RUN wget https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata
+RUN wget https://github.com/tesseract-ocr/tessdata_fast/raw/main/eng.traineddata
 RUN mv *.traineddata /usr/local/share/tessdata
 
 ARG GIT_ACCESS_TOKEN
