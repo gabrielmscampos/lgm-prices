@@ -13,3 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add marketplace module with class to open card in ligamagic marketplace and extract inventory information and price css codes
 - Add image submodule with PriceRecognizer class in order to recognize price numbers as string from assets file
 - Add card submoule to access card's information in inventory html
+- Add repoUri file with ECR repository path to register lambda container
+- Add get_card lambda function to access ligamagic and get card inventory (with prices using OCR) on demand
+- Add sam template, build and deploy scripts
