@@ -26,7 +26,7 @@ WORKDIR /opt
 RUN rm -rf leptonica-1.82.0 && rm -rf tesseract-5.2.0
 
 # Optional: install language packs
-RUN wget https://github.com/tesseract-ocr/tessdata_fast/raw/main/eng.traineddata
+RUN wget https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata
 RUN mv *.traineddata /usr/local/share/tessdata
 
 ARG GIT_ACCESS_TOKEN
