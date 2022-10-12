@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add repoUri file with ECR repository path to register lambda container
 - Add get_card lambda function to access ligamagic and get card inventory (with prices using OCR) on demand
 - Add sam template, build and deploy scripts
+- Add custom LambdaRole in sam template and add project:deploy-stage tag in FetchCardLGMFunction resource
 
 ### Changed
 - Improve get_card dockerfile to reduce container memory size
