@@ -19,3 +19,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Improve get_card dockerfile to reduce container memory size
+- Change tesseract-ocr language pack from tessdata_fast to tessdata to improve detection performance
