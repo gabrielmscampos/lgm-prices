@@ -5,6 +5,9 @@
 scratch/
 python_modules/
 .tool-versions
+.aws-sam
+params.prod.json
+params.staging.json
 
 ### Linux ###
 *~
