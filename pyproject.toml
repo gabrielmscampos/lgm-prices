@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lgm-prices"
-version = "0.1.0"
+version = "1.0.0"
 description = "Fetch LigaMagic cards price."
 authors = ["Gabriel Moreira <gabrielmscampos@gmail.com>"]
 license = "Private"
