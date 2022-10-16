@@ -2,8 +2,12 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,python
 
 ### Custom ###
+scratch/
 python_modules/
 .tool-versions
+.aws-sam
+params.prod.json
+params.staging.json
 
 ### Linux ###
 *~

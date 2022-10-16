@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: LGM Prices project
+
+Parameters:
+  Stage:
+    Type: String
+    Description: Api Gateway stage
+    AllowedValues:
+      - Staging
+      - Prod
+    ConstraintDescription: Must specify Staging or Prod.
+  GitAccessToken:
+    Type: String
+    Description: GitHub personal access token with repo scope to install package from private repository
+
+Resources:
+
+  LambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub 'LGMPrices-LambdaRole-${Stage}'
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: LambdaBasicExecutionRole
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: '*'
+
+  API:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub 'lgm-prices-${Stage}'
+      StageName: !Ref Stage
+
+  FetchCardLGMFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'FetchCardLGM-Function-${Stage}'
+      Description: Fetch card inventory in LigaMagic
+      Timeout: 30
+      MemorySize: 256
+      PackageType: Image
+      Role: !GetAtt LambdaRole.Arn
+      Tags:
+        project:deploy-stage: !Ref Stage
+      Events:
+        Get:
+          Type: Api
+          Properties:
+            RestApiId: !Ref API
+            Path: /price
+            Method: get
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./functions/get_card
+      DockerBuildArgs:
+        GIT_ACCESS_TOKEN: !Ref GitAccessToken
+
+Outputs:
+  API:
+    Description: Api Gateway root URL stage
+    Value: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"

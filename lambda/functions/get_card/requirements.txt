@@ -1,0 +1,1 @@
+git+https://${GIT_ACCESS_TOKEN}@github.com/gabrielmscampos/lgm-prices@dev
