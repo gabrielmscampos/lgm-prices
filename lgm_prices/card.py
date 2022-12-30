@@ -15,9 +15,12 @@ class Card:
         """
         Get seller name
         """
-        return self.soup\
-            .find("div", {"class": "e-col1"})\
-            .find("img")["title"]
+        col1 = self.soup.find("div", {"class": "e-col1"})
+        is_loja_sem_logo = col1.find("div", {"class": "mp-loja-semlogo"}) != None
+        if is_loja_sem_logo:
+            return col1.find("div", {"class": "mp-loja-semlogo"}).text
+        else:
+            return col1.find("img")["title"]
 
     def edition_and_extras(self) -> Tuple:
         """
