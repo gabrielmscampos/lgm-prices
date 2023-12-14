@@ -37,9 +37,7 @@ echo "S3_ARTIFACTS_PREFIX: ${S3_ARTIFACTS_PREFIX}"
 echo "S3_ARTIFACTS_BUCKET: ${S3_ARTIFACTS_BUCKET}"
 echo ""
 
-SAM_PARAMETERS=$( cat ${CURRENT_DIR}/params.${STAGE}.json | jq -r '[.[] | "\(.ParameterKey)=\(.ParameterValue)"] | join(" ")' )
-
-sam build --parameter-overrides $SAM_PARAMETERS
+$CURRENT_DIR/scripts/build.sh -s $STAGE
 
 cd .aws-sam/build
 
