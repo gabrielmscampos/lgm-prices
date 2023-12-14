@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# Do not specify Stage here, it will be handled with STAGE variable in getopts
+ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 CURRENT_DIR=$(pwd)
 AWS_DEPLOY_REGION=us-east-1
 AWS_STACK_NAME=lgm-prices-api
 S3_ARTIFACTS_PREFIX=lgm-prices-api
-IMAGE_RESPOSITORY=$ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/lgm-prices-api
 
-while getopts ":s:p:" opt; do
+while getopts ":a:s:p:" opt; do
   case $opt in
     s) STAGE="$OPTARG"
     ;;
@@ -25,6 +24,7 @@ done
 
 AWS_STACK_NAME="${AWS_STACK_NAME}-${STAGE}"
 S3_ARTIFACTS_PREFIX="${S3_ARTIFACTS_PREFIX}-${STAGE}"
+IMAGE_RESPOSITORY="${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/lgm-prices-api"
 S3_ARTIFACTS_BUCKET=samcli-artifacts
 
 echo "Performing deploy with the following settings:"
@@ -39,7 +39,7 @@ echo ""
 
 SAM_PARAMETERS=$( cat ${CURRENT_DIR}/params.${STAGE}.json | jq -r '[.[] | "\(.ParameterKey)=\(.ParameterValue)"] | join(" ")' )
 
-sam build --parameter-overrides $SAM_PARAMETERS --profile gabrielmscampos
+sam build --parameter-overrides $SAM_PARAMETERS
 
 cd .aws-sam/build
 
@@ -49,8 +49,7 @@ sam package \
     --output-template-file cloudformation.yaml \
     --s3-bucket $S3_ARTIFACTS_BUCKET \
     --s3-prefix $S3_ARTIFACTS_PREFIX \
-    --image-repository $IMAGE_RESPOSITORY \
-    --profile gabrielmscampos
+    --image-repository $IMAGE_RESPOSITORY
 
 sam deploy \
     --region $AWS_DEPLOY_REGION \
@@ -58,5 +57,4 @@ sam deploy \
     --stack-name $AWS_STACK_NAME \
     --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
     --parameter-overrides $SAM_PARAMETERS \
-    --image-repository $IMAGE_RESPOSITORY \
-    --profile gabrielmscampos
+    --image-repository $IMAGE_RESPOSITORY
