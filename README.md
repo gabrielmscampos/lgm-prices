@@ -1,3 +1,3 @@
-# LGM Prices
+# lgm-prices
 
-Package to extract card's information in LigaMagic Marketplace and recognize prices using Tesseract OCR.
+Fullstack project aimed to collect data from LigaMagic's website on-demand, display on a web interface and deploy the api in AWS using Lambda.
