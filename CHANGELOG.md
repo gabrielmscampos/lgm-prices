@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.1.0] - 2023-12-14
+
+### Added
+- feat: add dead-simple frontend using React
+
+### Changed
+- refactor: enhance repository structure
+- docs: improve changelog
+- refactor: install lgm-prices in aws lambda from main branch instead of dev
+
+### Fixed
+- refactor: removed sensitive data from repository using BFG
+- fix: merge seller's name without logo hotfix
+
 ## [v1.0.1] - 2022-12-30
 
 ### Fixed
